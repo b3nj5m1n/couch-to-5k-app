@@ -316,7 +316,7 @@ ul { list-style: none; }
           <svg viewBox="0 0 220 220" width="220" height="220">
             <circle class="timer-ring-bg" cx="110" cy="110" r="97"/>
             <circle class="timer-ring-fill run" id="timer-ring" cx="110" cy="110" r="97"
-              stroke-dasharray="609.7" stroke-dashoffset="0"/>
+              />
           </svg>
           <div class="timer-center">
             <div class="timer-time" id="timer-display">1:00</div>
@@ -705,19 +705,19 @@ function updatePlayIcon(){
   document.getElementById('btn-play').setAttribute('aria-label', isPlaying ? 'Pause' : 'Play');
 }
 
-document.getElementById('btn-play').addEventListener('click', ()=>{
+document.getElementById('btn-play').onclick = ()=>{
   isPlaying = !isPlaying;
   if(isPlaying) startTicking(); else stopTicking();
   updatePlayIcon();
 });
 
-document.getElementById('btn-skip').addEventListener('click', ()=>{
+document.getElementById('btn-skip').onclick = ()=>{
   const ivs = WEEKS[workoutWeekIdx].runs[workoutRunIdx].intervals;
   if(intervalIdx < ivs.length-1){ stopTicking(); intervalIdx++; renderWorkoutInterval(); if(isPlaying) startTicking(); }
   else { isPlaying=false; stopTicking(); showComplete(); }
 });
 
-document.getElementById('btn-prev').addEventListener('click', ()=>{
+document.getElementById('btn-prev').onclick = ()=>{
   if(intervalIdx > 0){ stopTicking(); intervalIdx--; renderWorkoutInterval(); if(isPlaying) startTicking(); }
 });
 
