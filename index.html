@@ -628,8 +628,9 @@ function startWorkout(){
   document.getElementById('workout-sub').textContent = `~${Math.round(getTotalDuration(run.intervals)/60)} min total`;
   
   intervalIdx=0; isPlaying=false; clearInterval(timerInterval);
+      showView('view-workout');
   renderWorkoutInterval();
-  showView('view-workout');
+
 }
 
 function renderWorkoutInterval(){
