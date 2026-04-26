@@ -713,8 +713,38 @@ function tick(){
   }
 }
 
-function startTicking(){ clearInterval(timerInterval); timerInterval = setInterval(tick, 1000); }
+function startTicking(){ clearInterval(timerInterval); timerInterval = setInterval(tick, 1000); announceInterval(); }
 function stopTicking(){ clearInterval(timerInterval); }
+
+const audioCtx = new (window.AudioContext || window.webkitAudioContext || window.audioContext);
+const speechSynth = window.speechSynthesis;
+
+// https://stackoverflow.com/a/29641185
+function beep(duration, frequency, volume, type, callback) {
+    var oscillator = audioCtx.createOscillator();
+    var gainNode = audioCtx.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    if (volume){gainNode.gain.value = volume;}
+    if (frequency){oscillator.frequency.value = frequency;}
+    if (type){oscillator.type = type;}
+    if (callback){oscillator.onended = callback;}
+    
+    oscillator.start(audioCtx.currentTime);
+    oscillator.stop(audioCtx.currentTime + ((duration || 500) / 1000));
+};
+
+function announceInterval() {
+  const run = WEEKS[workoutWeekIdx].runs[workoutRunIdx];
+  const ivs = run.intervals;
+  const iv = ivs[intervalIdx];
+  const tts = iv.type + " for " + iv.duration + " seconds.";
+  const newUtter = new SpeechSynthesisUtterance(tts);
+  newUtter.rate = 0.9;
+  beep(650, 500, 1, "sine", setTimeout(() => {speechSynth.speak(newUtter);}, 1000));
+}
 
 function updatePlayIcon(){
   document.getElementById('play-icon').innerHTML = isPlaying
